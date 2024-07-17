@@ -15,7 +15,11 @@ sudo ufw allow 4243  // allow the particular port
 
 
 vim /etc/default/ufw   // known the ufw configuration file 
+nano /etc/default/ufw
+
 :q                      // exit of the vim editor 
+
+sudo netstat -tulpn     // know that which port are where 
 
 
 
@@ -110,4 +114,12 @@ sudo ufw deny ftp
 
 // and also deny the http 
 sudo ufw deny http
+```
+
+- Some usefull connection which You may want to allow
+```
+To Allow SSH Connection: ufw allow ssh or ufw allow 22/tcp
+To Secure Web Server: ufw allow 80/tcp
+To Allow FTP Connection: ufw allow ftp or ufw allow 21/tcp and 20/ftp
+To Allow Web Server Profile: ufw allow www
 ```
