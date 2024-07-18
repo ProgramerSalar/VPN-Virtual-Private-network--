@@ -100,6 +100,28 @@ cp nginx_backup.conf nginx.conf   // copy the file
 ```
 
 
+add the content of nginx.conf file: 
+```
+events {
+
+}
+
+http {
+
+    server {
+
+        listen 80;
+        server_name 213.210.36.105;      // this is my ip address 
+
+        root /media/bloggingtemplate/;    // this is file which is my website 
+
+        }
+
+
+
+}
+```
+
 ```
 
 nginx -t            // check the nginx 
