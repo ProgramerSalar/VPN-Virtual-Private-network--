@@ -86,3 +86,36 @@ systemctl enable nginx
 ```
 reboot   // if you reboot the machine then you should wait some minute 
 ```
+
+### 0.1  uploading the normal index.html file 
+
+- make sure. upload the folder in this directory [ root@srv563446:/# ] not for this [root@srv563446:~# ] if you are in this directory and upload the index.html folder then not worked. 
+
+
+- we will work in /etc/nginx/conf.d file  so make a backup file 
+```
+cd /etc/nginx
+mv nginx.conf nginx_backup.conf   // move  the file 
+cp nginx_backup.conf nginx.conf   // copy the file 
+```
+
+
+```
+
+nginx -t            // check the nginx 
+systemctl reload nginx   // realod the nginx 
+
+
+```
+
+```
+nginx -s reload     // reload command of nginx 
+```
+-> get this 2024/07/18 15:12:59 [notice] 3511#3511: signal process started
+
+
+* start the website 
+```
+cat /var/log/nginx/*
+tail -f /var/log/nginx/*    // tail where is the problem if have the problem in you web 
+```
