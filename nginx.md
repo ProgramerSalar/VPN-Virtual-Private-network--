@@ -833,7 +833,7 @@ typically form submissions.
 
 ➤ client_header_buffer_size: Similar to the previous directive, 
 only instead it handles the client header size.
- 
+
 ➤ client_max_body_size: The maximum allowed size for a 
 client request. If the maximum size is exceeded, then Nginx 
 will spit out a 413 error or Request Entity Too Large. 
@@ -852,3 +852,57 @@ time out.
 ➤ keepalive_timeout assigns the timeout for keep-alive 
 connections with the client. Nginx will close connections with 
 the client after this period of time.
+
+➤ send_timeout is established not on the entire transfer of answer , buy only between two operations of reading; if after this time client will tke nothing, then Nginx is shutting down the connection.
+
+➤ Gzip Compression - 
+
+➤ Gzip can help reduce the amount of network transfer Nginx 
+deals with. However, be careful increasing the 
+gzip_comp_level too high as the server will begin wasting cpu 
+cycles.
+
+![alt text](<Screenshot 2024-07-19 195500.png>)
+
+➤ Static File Caching - 
+
+➤ It’s possible to set expire headers for files that don’t change 
+and are served regularly. This directive can be added to the 
+actual Nginx server block.
+
+![alt text](<Screenshot 2024-07-19 195547.png>)
+
+
+```
+http {
+
+    include mime.types;
+
+    # Buffer size for POST submissions 
+    client_body_buffer_size 10k;    // it means it will accept up to the all the post request which have the vody size within the 10 kilobytes they will served as a buffer, the post request whcih have the size more than 10 kilobytes will not be served as a buffer like: 100; -> bite 100k; -> kilobyte 100M; -> MegaByte
+    client_max_body_size 8m;   // if client body will exceed 8 megabyte then you will get the response 413 request is too large
+
+    # Buffer size for Headers 
+    client_header_buffer_size 1k;
+
+    # Max time to recieve client headers/body
+    client_body_timeout 12;    // 12 milisecond
+    client_header_timeout 12;
+
+    # Max time to keep a connection open for 
+    keepalive_timeout 15;
+
+    # Max time for the client accept/receive a response 
+    send_timeout 10;
+
+    # skip buffering for static files
+    sendfile on;
+
+    location ~(jpg|jpeg|png|gif|ico|css|js)$ {
+        expires 365d;
+    }
+
+
+
+}
+```
