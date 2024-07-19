@@ -256,3 +256,89 @@ And add the types in mime.types file
 
 ## Location Context 
 [Location Context Pdf](<nginx-course-files/nginx-course-files/4.1 Location-Block-Context-in-NGINX.pdf>)
+
+```
+events {
+
+}
+
+http {
+
+    include mime.types;
+
+    server {
+
+        listen 80;
+        server_name 213.210.36.105;
+
+        root /bloggingtemplate/;
+
+        location /about{
+            return 200 "Hello This is About Page";
+        }
+
+    }
+
+
+
+}
+```
+
+
+
+➤ location_match: Defines what Nginx should check the request URI against.
+
+➤ The existence or nonexistence of the modifier, affects the way that the Nginx attempts to match the location block.
+
+➤ The modifiers below will cause the associated location block to be interpreted as follows: 
+
+➤ (none): If no modifiers are present, the location is interpreted as a prefix match. This means that the location given will be matched against the beginning of the request 
+URI to determine a match. 
+
+➤ =: If an equal sign is used, this block will be considered a match if the request URI 
+exactly matches the location given. 
+
+```
+ location = /about{
+            return 200 "Hello This is About Page in the Exact Match";
+        }
+```
+
+➤ ~: If a tilde modifier is present, this location will be interpreted as a case-sensitive 
+regular expression match. 
+
+```
+ location ~ /about{
+            return 200 "Hello This is About Page ";
+        }
+```
+
+➤ ~*: If a tilde and asterisk modifier is used, the location block will be interpreted as a 
+case-insensitive regular expression match. 
+
+```
+ location ~* /about{
+            return 200 "Hello This is About Page ";
+        }
+```
+
+➤ ^~: If a carat and tilde modifier is present, and if this block is selected as the best 
+non-regular expression match, regular expression matching will not take place
+```
+ location ^~ /about{
+            return 200 "Hello This is About Page ";
+        }
+```
+
+
+➤ Priority of Modifiers: Nginx chooses the location that will be 
+used to serve a request in a similar fashion to how it selects a 
+server block. It runs through a process that determines the 
+best location block for any given request. 
+
+➤ Understanding this process is a crucial requirement in being 
+able to configure Nginx reliably and accurately. 
+
+1. Exact Match = URI 
+2. Preferential Prefix Match ^~ URI 
+3. REGEX Match. ~* URI
