@@ -454,3 +454,83 @@ via connection.
 -$date_local - Current time in the local time zone.
 -$hostname - Host name . 
 -$nginx_version - Shows the nginx version.
+
+
+
+## 0.3 NGINX: Lab - Rewrite and Return
+
+➤ Return & Rewrite: Both for one of two purposes- 
+
+➤ First, if a URL has changed. 
+
+➤ To control the request within Nginx. 
+For example, a request can be forwarded to an application 
+if the content will be generated dynamically. 
+
+➤ Return Directive - Return is the simpler directive to use 
+compared to NGINX rewrite. 
+
+➤ Return must be enclosed within a server or location block 
+which defines which URLs should be rewritten. 
+
+![alt text](<Screenshot 2024-07-19 143618.png>)
+
+
+➤ Rewrite Directive - This directive needs to be in a location or server block in 
+order to rewrite the URL. 
+
+➤ Rewrite directive can be used to perform more granular tasks as with it you can 
+perform more complicated URL distinctions such as: 
+
+➤ Capture elements in the original URL 
+
+➤ Change or add elements in the path 
+
+➤ Syntax : 
+rewrite regex URL [flag];
+
+➤ Rewrite directive does not send a redirect to the client in all cases. If the 
+rewritten URL matches with another following directive, Nginx will rewrite the 
+URL again.
+
+➤ A rewrite directive will only return an HTTP 301 or 302 status code. If another 
+status code is required, a return directive is needed after the rewrite directive.
+
+➤ Rewrite Directive - This directive needs to be in a location or server block in 
+order to rewrite the URL. 
+
+➤ Rewrite directive can be used to perform more granular tasks as with it you can 
+perform more complicated URL distinctions such as: 
+
+➤ Capture elements in the original URL 
+
+➤ Change or add elements in the path 
+
+➤ Syntax : 
+
+**rewrite regex URL [flag];**
+
+➤ Rewrite directive does not send a redirect to the client in all cases. If the 
+rewritten URL matches with another following directive, Nginx will rewrite the 
+URL again.
+
+➤ A rewrite directive will only return an HTTP 301 or 302 status code. If another 
+status code is required, a return directive is needed after the rewrite directive.
+
+
+```
+rewrite ^/guest/\w+ /welcome;
+
+rewrite ^/user/(\w+) /welcome/$1;
+
+location = /welcome/manish{
+    return 200 "Hello Manish, How are You";
+}
+
+location /welcome{
+    return 301 assets/images/about/profile_image.jpg;
+}
+```
+
+see here i put the url like this: **http://213.210.36.105/welcome/manish** Then i get the content of location which is i set
+
