@@ -628,3 +628,30 @@ location /404{
     return 404 "Sorry, this resources not exists";
 }
 ```
+
+
+## 0.5 Logging in Nginx
+
+```
+/var/log/nginx  // here is the log file that is error.log and access.log 
+
+ll -lsh    // check the size of the file 
+tail -f *   // tell the file 
+
+```
+
+- if you create the access.log and error.log in particular file 
+
+```
+location /userdata {
+    access_log /var/log/nginx/access_user.log;
+    return 200 "user data are found here";
+}
+```
+Along with you off the access log
+```
+location /userdata {
+    access_log off;
+    return 200 "user data are found here";
+}
+```
