@@ -906,3 +906,55 @@ http {
 
 }
 ```
+
+
+
+## 0.8 Add Dynamic Modules 
+
+- i will do leter
+
+## 0.9 Reverce Proxy
+
+➤ Reverse Proxy: A reverse proxy is a server that sits in front 
+of web servers and forwards client (e.g. web browser) 
+requests to those web servers.
+
+➤ Reverse proxies are typically implemented to help 
+increase security, performance, and reliability. 
+
+![alt text](<Screenshot 2024-07-19 210126.png>)
+
+➤ Benefits of Reverse Proxy - 
+
+➤ Load Balancing - A popular website that gets millions of users every 
+day may not be able to handle all of its incoming site traffic with a 
+single origin server. Instead, the site can be distributed among a pool 
+of different servers, all handling requests for the same site.
+
+➤ A reverse proxy can provide a load balancing solution which will 
+distribute the incoming traffic evenly among the different servers to 
+prevent any single server from becoming overloaded.
+
+➤ Protection from attacks - With a reverse proxy in place, a web site 
+or service never needs to reveal the IP address of their origin 
+server(s). This makes it much harder for attackers to leverage a 
+targeted attack against them such as DOS attack, CDN attack and 
+more
+
+➤ Benefits of Reverse Proxy - 
+
+➤ Caching - A reverse proxy can also cache content, resulting in 
+faster performance. 
+
+➤ SSL encryption - Encrypting and decrypting SSL 
+communications for each client can be computationally 
+expensive for an origin server. A reverse proxy can be 
+configured to decrypt all incoming requests and encrypt all 
+outgoing responses, freeing up valuable resources on the 
+origin server.
+
+
+![alt text](<Screenshot 2024-07-19 212046.png>)
+
+
+
