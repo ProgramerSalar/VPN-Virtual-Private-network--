@@ -254,7 +254,8 @@ And add the types in mime.types file
 ```
 
 
-## Location Context 
+## 0.1 NGINX: Lab - Location Context
+
 [Location Context Pdf](<nginx-course-files/nginx-course-files/4.1 Location-Block-Context-in-NGINX.pdf>)
 
 ```
@@ -342,3 +343,114 @@ able to configure Nginx reliably and accurately.
 1. Exact Match = URI 
 2. Preferential Prefix Match ^~ URI 
 3. REGEX Match. ~* URI
+
+
+for example you can define location like this: 
+```
+ location ^~ /Home{
+            return 200 "Hello This is About Page ";
+        }
+ location ^~ /Eduction{
+            return 200 "Hello This is About Page ";
+        }
+ location ^~ /Skills{
+            return 200 "Hello This is About Page ";
+        }
+ location ^~ /Experience{
+            return 200 "Hello This is About Page ";
+        }
+```
+
+[configuration techinology](<nginx-course-files/nginx-course-files/4.2 NGINX-Configuration-Terminology.pdf>)
+
+[performance optimization](<nginx-course-files/nginx-course-files/4.3 NGINX-Performance-Optimization.pdf>)
+
+[performance optimization 2](<nginx-course-files/nginx-course-files/4.4 NGINX-Performance-Optimization-2.pdf>)
+
+[Rewrite and Return directories](<nginx-course-files/nginx-course-files/4.5 Rewrite-and-Return-Directives.pdf>)
+
+[Try-files-in-nginx-conf](<nginx-course-files/nginx-course-files/4.6 try-files-in-NGINX-Conf.pdf>)
+
+[variable in nginx.conf](nginx-course-files/nginx-course-files/4.7Variables-in-NGINX-Conf.pdf)
+
+## 0.2 NGINX: Lab - Variable NGINX
+
+➤ Variables: NGINX configuration can hold the variable and 
+NGINX variable can hold the String Value. 
+
+```
+nano /etc/nginx/nginx.conf
+
+ location  /find{
+            return 200 "%hostname \n $args \n $connection_requests \n $nginx_version";  // in the stgring all are variable 
+        }
+
+
+// variable %hostname -> this is hostname of your VPN 
+// $args   -> this is argument in here i don't pass it 
+// $connection_requests   -> this is connection requestions means how many times your website are open in  ip address
+// $nginx_version    -> this is nginx version which is you used 
+// \n  -> this is new line 
+
+```
+
+➤ Set directive is used to assign variable in NGINX. 
+set $a "hello world";  
+
+➤ User can put conditional statements on basis of variables. 
+
+```
+if( $arg_name = 'manish' ){
+                return 200 "Yes, I am Manish";
+        }turn 200 "Yes, I am Manish"
+}
+```
+for example: 
+```
+events {
+
+}
+
+http {
+
+    include mime.types;
+
+    server {
+
+        listen 80;
+        server_name 213.210.36.105;
+
+        root /bloggingtemplate/;
+
+        if( $arg_name = 'manish' ){
+                return 200 "Yes, I am Manish";
+        }
+
+        location /about{
+
+                return 200 "Hello, This is About Page";
+
+                }
+
+        }
+
+
+
+}
+```
+
+see here:
+> my url is like this: **http://213.210.36.105/?name=manish** if i put this **http://213.210.36.105/?name=tom** then condtion are not worked
+
+
+
+
+➤ Few Important inbuilt variables: 
+- $args - List of arguments on the request line. 
+- $body_bytes_sent - Number of bytes sent to the client. 
+- $bytes_received - Number of bytes received from a client.
+- $connection_requests - Current number of requests made 
+via connection. 
+-$date_local - Current time in the local time zone.
+-$hostname - Host name . 
+-$nginx_version - Shows the nginx version.
