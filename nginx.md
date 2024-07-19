@@ -402,7 +402,7 @@ set $a "hello world";
 ```
 if( $arg_name = 'manish' ){
                 return 200 "Yes, I am Manish";
-        }turn 200 "Yes, I am Manish"
+        }
 }
 ```
 for example: 
@@ -516,3 +516,115 @@ location /welcome{
 
 see here i put the url like this: **http://213.210.36.105/welcome/manish** Then i get the content of location which is i set
 
+
+full code are here: 
+```
+http {
+
+    include mime.types;
+
+    server {
+
+        listen 80;
+        server_name 213.210.36.105;
+
+        root /bloggingtemplate/;
+
+        if ( $arg_name = 'manish' ){
+                return 200 "Yes, I am Manish";
+        }
+
+        rewrite ^/guest/\w+ /welcome;
+
+        rewrite ^/user/(\w+) /welcome/$1;
+
+        location = /welcome/manish{
+                return 200 "Hello Manish, How are You";
+        }
+
+        location /welcome{
+                return 301 assets/images/about/profile_image.jpg;
+        }
+
+        location /about{
+
+                return 200 "Hello, This is About Page";
+
+                }
+
+        }
+
+
+
+}
+```
+
+
+## 0.4 NGINX: Lab - try_files in NGINX Conf
+
+
+
+➤ try_files: The try_files directive can be used to check 
+whether the specified file or directory exists. 
+
+
+➤ NGINX makes an internal redirect if it does, or returns a 
+specified status code if it doesn’t.
+
+
+```
+// try files are find the first resorces that is /testobject if not found then goes to next resources /video that location are found 
+try_files /testobject /video;   // in here have two resource path are found 
+
+
+location /video {
+    return 200 "Enjoy the Movie";
+}
+```
+same to like this: 
+```
+
+try_files /assets/images/about/profile_image.jpg /video;   
+
+
+location /video {
+    return 200 "Enjoy the Movie";
+}
+```
+and also this: 
+
+```
+// try files are find the first resorces that is /testobject if not found then goes to next resources /video that location are found 
+try_files /testobject /video;   // in here have two resource path are found 
+
+
+location /video {
+    return 200 "Enjoy the Movie";
+}
+```
+same to like this: 
+
+```
+
+try_files $uri /assets/images/about/profile_image.jpg /video;   //here are three rescources found 
+
+
+location /video {
+    return 200 "Enjoy the Movie";
+}
+```
+and also include the 404 
+
+```
+
+try_files $uri /assets/images/about/profile_image.jpg /video /404;   //here are four rescources found 
+
+
+location /video {
+    return 200 "Enjoy the Movie";
+}
+
+location /404{
+    return 404 "Sorry, this resources not exists";
+}
+```
