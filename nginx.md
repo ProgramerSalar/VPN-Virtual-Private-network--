@@ -252,3 +252,7 @@ And add the types in mime.types file
 /etc/nginx# nano mime.types
 
 ```
+
+
+## Location Context 
+[Location Context Pdf](<nginx-course-files/nginx-course-files/4.1 Location-Block-Context-in-NGINX.pdf>)
