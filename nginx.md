@@ -476,25 +476,7 @@ which defines which URLs should be rewritten.
 ![alt text](<Screenshot 2024-07-19 143618.png>)
 
 
-➤ Rewrite Directive - This directive needs to be in a location or server block in 
-order to rewrite the URL. 
 
-➤ Rewrite directive can be used to perform more granular tasks as with it you can 
-perform more complicated URL distinctions such as: 
-
-➤ Capture elements in the original URL 
-
-➤ Change or add elements in the path 
-
-➤ Syntax : 
-rewrite regex URL [flag];
-
-➤ Rewrite directive does not send a redirect to the client in all cases. If the 
-rewritten URL matches with another following directive, Nginx will rewrite the 
-URL again.
-
-➤ A rewrite directive will only return an HTTP 301 or 302 status code. If another 
-status code is required, a return directive is needed after the rewrite directive.
 
 ➤ Rewrite Directive - This directive needs to be in a location or server block in 
 order to rewrite the URL. 
