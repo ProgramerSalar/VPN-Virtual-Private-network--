@@ -655,3 +655,136 @@ location /userdata {
     return 200 "user data are found here";
 }
 ```
+
+
+## 0.6 Handle Dynamic Requests
+- i will do this leter 
+
+
+## 0.7 Worker Process
+
+
+➤ NGINX default worker process are 1. 
+
+➤ Worker Processes can be defined via directive 
+worker_processes. 
+
+➤ This directive is responsible for letting our virtual server 
+know how many workers to spawn once it has become bound 
+to the proper IP and port(s).
+
+➤ It is common practice to run 1 worker process per core CPU. 
+
+➤ Anything above 1 Process per CPU won’t hurt your system, 
+but it will leave idle processes usually just lying about.
+
+➤ Worker process directive belongs to Global Context.
+
+➤ Worker Connection: This directive tells our worker processes 
+how many people can simultaneously be served by Nginx.
+
+➤ This is the child of Events Context. 
+
+➤ The default value is 768; however, considering that every 
+browser usually opens up at least 2 connections/server, this 
+number can half.
+
+➤ User can check our core’s limitations by issuing a ulimit 
+command: 
+
+```
+ulimit -n 
+```
+
+➤ worker_connections 1000 - This means, NGINX can server 
+1000 clients/second.
+
+
+* check the how much master and worker process are found 
+```
+ps -aux --forest | grep nginx
+````
+output: 
+```
+root        9811  0.0  0.0   6144  2048 pts/0    S+   11:55   0:00  |       \_ tail -f /var/log/nginx/access.log /var/log/nginx/access_user.log /var/log/nginx/error.log
+root       10723  0.0  0.0   7076  2176 pts/1    S+   13:03   0:00          \_ grep --color=auto nginx
+root        7485  0.0  0.0  11196  4236 ?        Ss   05:12   0:00 nginx: master process /usr/sbin/nginx -g daemon on; master_process on;   // this is one master process 
+nobody      9814  0.0  0.0  12708  4664 ?        S    11:56   0:00  \_ nginx: worker process  // this is worker process 
+```
+
+
+```
+// process are here 
+worker_processes 4;
+
+events {
+
+}
+
+http {
+
+    include mime.types;
+
+    server {
+
+        listen 80;
+        server_name 213.210.36.105;
+
+        root /bloggingtemplate/;
+
+        location /userdata {
+                access_log /var/log/nginx/access_user.log;
+                return 200 "user data are found here";
+                }
+
+        }
+
+
+
+}
+```
+
+- i will check the process 
+```
+nginx -t 
+nginx -s reload 
+ps -aux --forest | grep nginx
+```
+output: 
+```
+root        9811  0.0  0.0   6144  2048 pts/0    S+   11:55   0:00  |       \_ tail -f /var/log/nginx/access.log /var/log/nginx/access_user.log /var/log/nginx/error.log
+root       10742  0.0  0.0   7076  2176 pts/1    S+   13:09   0:00          \_ grep --color=auto nginx
+root        7485  0.0  0.0  11196  4236 ?        Ss   05:12   0:00 nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
+nobody     10737  0.0  0.0  12716  4152 ?        S    13:09   0:00  \_ nginx: worker process
+nobody     10738  0.0  0.0  12716  4280 ?        S    13:09   0:00  \_ nginx: worker process
+nobody     10739  0.0  0.0  12716  4152 ?        S    13:09   0:00  \_ nginx: worker process
+nobody     10740  0.0  0.0  12716  4280 ?        S    13:09   0:00  \_ nginx: worker process
+```
+
+- check your computer configuration 
+```
+lscpu   // check configuration of cpu
+nproc   // same 
+```
+
+- you should auto the process, Automatically configure how much cpu found in you machine 
+
+```
+worker_processes auto;
+```
+
+
+- check the how much operation can be handled by thie particular machine, default is 1024
+```
+ulimit -n
+```
+
+
+- i will include this operation i
+```
+events {
+    worker_processes 1024;
+}
+```
+
+
