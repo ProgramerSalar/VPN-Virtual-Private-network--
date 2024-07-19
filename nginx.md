@@ -216,3 +216,39 @@ and reload the page
 ```
 nginx -s reload
 ```
+
+
+- i will include the types in nginx.conf but how many types you put in here so also nginx are give the folder mime.types in which you define the types of foler 
+
+
+so i will remove the types in nginx.conf file 
+```
+events {
+
+}
+
+http {
+
+    include mime.types;
+
+    server {
+
+        listen 80;
+        server_name 213.210.36.105;
+
+        root /bloggingtemplate/;
+
+        }
+
+
+
+}
+```
+
+
+And add the types in mime.types file
+
+```
+/etc/nginx# nano mime.types
+
+```
