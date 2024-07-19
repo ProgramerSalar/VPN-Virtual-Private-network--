@@ -817,3 +817,38 @@ http {
 }
 ```
 
+## 0.8 NGINX: Performance Optimization
+
+➤ Buffer : Buffer Size is another aspect to manage the NGINX 
+Performance
+
+![alt text](<Screenshot 2024-07-19 190157.png>)
+
+➤ If the buffer sizes are too low, then Nginx will have to write to 
+a temporary file causing the disk to read and write constantly.
+
+➤ client_body_buffer_size: This handles the client buffer size, 
+meaning any POST actions sent to Nginx. POST actions are 
+typically form submissions. 
+
+➤ client_header_buffer_size: Similar to the previous directive, 
+only instead it handles the client header size.
+ 
+➤ client_max_body_size: The maximum allowed size for a 
+client request. If the maximum size is exceeded, then Nginx 
+will spit out a 413 error or Request Entity Too Large. 
+
+➤ large_client_header_buffers: The maximum number and 
+size of buffers for large client
+
+➤ Timeouts - 
+
+➤ client_body_timeout and client_header_timeout directives 
+are responsible for the time a server will wait for a client body 
+or client header to be sent after request. If neither a body or 
+header is sent, the server will issue a 408 error or Request 
+time out. 
+
+➤ keepalive_timeout assigns the timeout for keep-alive 
+connections with the client. Nginx will close connections with 
+the client after this period of time.
