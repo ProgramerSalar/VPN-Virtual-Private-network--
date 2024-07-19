@@ -661,7 +661,7 @@ location /userdata {
 - i will do this leter 
 
 
-## 0.7 Worker Process
+## 0.7 Worker Process | Load Optimization
 
 
 ➤ NGINX default worker process are 1. 
@@ -780,11 +780,40 @@ ulimit -n
 ```
 
 
-- i will include this operation i
+- i will include this operation 
 ```
 events {
-    worker_processes 1024;
+    worker_connections 1024;
 }
 ```
 
+whole nginx.conf file code: 
+```
+worker_processes auto;
+events {
+    worker_connections 1024;
+}
+
+http {
+
+    include mime.types;
+
+    server {
+
+        listen 80;
+        server_name 213.210.36.105;
+
+        root /bloggingtemplate/;
+
+        location /userdata {
+                access_log /var/log/nginx/access_user.log;
+                return 200 "user data are found here";
+                }
+
+        }
+
+
+
+}
+```
 
