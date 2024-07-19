@@ -141,3 +141,78 @@ nginx -s reload     // reload command of nginx
 cat /var/log/nginx/*
 tail -f /var/log/nginx/*    // tail where is the problem if have the problem in you web 
 ```
+Note: nginx are recognized the css and js file but not get these file so only row html are found.
+
+- known the partucular file are 
+```
+ curl -I http://213.210.36.105/assets/css/bootsnav.css
+```
+get this 
+```
+HTTP/1.1 200 OK    // status is ok 
+Server: nginx/1.24.0 (Ubuntu)
+Date: Fri, 19 Jul 2024 05:33:47 GMT
+Content-Type: text/plain       // my css file are not text plain 
+Content-Length: 35191
+Last-Modified: Fri, 19 Jul 2024 05:09:50 GMT
+Connection: keep-alive
+ETag: "6699f51e-8977"
+Accept-Ranges: bytes
+```
+
+
+so i will changes in nginx.conf file 
+```
+events {
+
+}
+
+http {
+
+    
+
+    server {
+
+        listen 80;
+        server_name 213.210.36.105;
+
+        root /bloggingtemplate/;
+
+        }
+
+
+
+}
+
+```
+To 
+```
+events {
+
+}
+
+http {
+
+    types{
+            text/html html;     // add the types of html 
+            text/css  css;      // add the types of css 
+        }
+
+    server {
+
+        listen 80;
+        server_name 213.210.36.105;
+
+        root /bloggingtemplate/;
+
+        }
+
+
+
+}
+```
+
+and reload the page
+```
+nginx -s reload
+```
