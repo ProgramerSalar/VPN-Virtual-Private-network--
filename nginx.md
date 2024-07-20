@@ -295,13 +295,24 @@ ctrl + x   -> exit command
 ps -ef | grep nginx
 ```
 
+
+
 6. Start Again nginx 
 ```
+nginx    // start the survice 
 nginx -s stop 
-systemctl start nginx  
+systemctl start nginx      // start the nginx by master process 
+systemctl status nginx     // check the status of nginx 
 ```
 
-
+7. if you reboot the machine then also you survice is not work so you can enable the nginx 
+```
+systemctl enable nginx
+```
+output:
+```
+Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /usr/lib/systemd/system/nginx.service.
+```
 
 ### 0.0 Add NGINX Process in Systemd Services to make the WebServer Resilient.
 
