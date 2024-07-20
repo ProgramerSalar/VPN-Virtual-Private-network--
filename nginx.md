@@ -119,6 +119,7 @@ tar -zxvf nginx-1.19.1.tar.gz
 cd nginx-1.19.1
 ./configure
 ```
+Note: if you get the error: ./configure: error: C compiler cc is not found
 
 5. Install code compiler
 ```
@@ -130,11 +131,38 @@ CentOS : yum groupinstall "Development Tools"
 ```
 ./configure
 ```
+Note: if get error Again: the HTTP rewrite module requires the PCRE library.
 
 7. GET Support Libraries
 ```
 Ubuntu : apt-get install libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev make
 CentOS : yum install pcre pcre-devel zlib zlib-devel openssl openssl-devel make
+```
+
+8. Configure source code to the build.
+```
+./configure
+```
+output:
+```
+Configuration summary
+  + using system PCRE library
+  + OpenSSL library is not used
+  + using system zlib library
+
+  nginx path prefix: "/usr/local/nginx"
+  nginx binary file: "/usr/local/nginx/sbin/nginx"
+  nginx modules path: "/usr/local/nginx/modules"
+  nginx configuration prefix: "/usr/local/nginx/conf"
+  nginx configuration file: "/usr/local/nginx/conf/nginx.conf"
+  nginx pid file: "/usr/local/nginx/logs/nginx.pid"
+  nginx error log file: "/usr/local/nginx/logs/error.log"
+  nginx http access log file: "/usr/local/nginx/logs/access.log"
+  nginx http client request body temporary files: "client_body_temp"
+  nginx http proxy temporary files: "proxy_temp"
+  nginx http fastcgi temporary files: "fastcgi_temp"
+  nginx http uwsgi temporary files: "uwsgi_temp"
+  nginx http scgi temporary files: "scgi_temp"
 ```
 
 8. Execute configuration again
@@ -143,10 +171,63 @@ CentOS : yum install pcre pcre-devel zlib zlib-devel openssl openssl-devel make
 pid-path=/var/run/nginx.pid --with-http_ssl_module
 ```
 
+output:
+```
+Configuration summary
+  + using system PCRE library
+  + using system OpenSSL library
+  + using system zlib library
+
+  nginx path prefix: "/usr/local/nginx"
+  nginx binary file: "/usr/bin/nginx"
+  nginx modules path: "/usr/local/nginx/modules"
+  nginx configuration prefix: "/etc/nginx"
+  nginx configuration file: "/etc/nginx/nginx.conf"
+  nginx pid file: "/var/run/nginx.pid"
+  nginx error log file: "/var/log/nginx/error.log"
+  nginx http access log file: "/var/log/nginx/access.log"
+  nginx http client request body temporary files: "client_body_temp"
+  nginx http proxy temporary files: "proxy_temp"
+  nginx http fastcgi temporary files: "fastcgi_temp"
+  nginx http uwsgi temporary files: "uwsgi_temp"
+  nginx http scgi temporary files: "scgi_temp"
+```
+
 9. Compile and install Nginx
+
+[A].
 ```
 make
+```
+output:
+```
+objs/ngx_modules.o \
+-lcrypt -lpcre -lssl -lcrypto -lz \
+-Wl,-E
+sed -e "s|%%PREFIX%%|/usr/local/nginx|" \
+        -e "s|%%PID_PATH%%|/var/run/nginx.pid|" \
+        -e "s|%%CONF_PATH%%|/etc/nginx/nginx.conf|" \
+        -e "s|%%ERROR_LOG_PATH%%|/var/log/nginx/error.log|" \
+        < man/nginx.8 > objs/nginx.8
+make[1]: Leaving directory '/root/nginx-1.27.0'
+```
+
+[B].
+```
 make install
+``` 
+Last LIne output:
+```
+cp conf/nginx.conf '/etc/nginx/nginx.conf.default'
+test -d '/var/run' \
+        || mkdir -p '/var/run'
+test -d '/var/log/nginx' \
+        || mkdir -p '/var/log/nginx'
+test -d '/usr/local/nginx/html' \
+        || cp -R html '/usr/local/nginx'
+test -d '/var/log/nginx' \
+        || mkdir -p '/var/log/nginx'
+make[1]: Leaving directory '/root/nginx-1.27.0'
 ```
 
 
