@@ -88,6 +88,15 @@ While installing NGINX from prebuilt packages is quicker and easier, compiling f
 > see the pdf
 [text](<nginx-course-files/nginx-course-files/2.1 Text Direction  Building NGINX from Source Code .pdf>)
 
+- make sure you are in root directory 
+```
+root@srv563446:~#
+```
+
+not for this directory 
+```
+root@srv563446:/#
+```
 
 1. Update Packages
 ```
@@ -97,7 +106,7 @@ CentOS - yum update
 
 2. Download the NGINX source code from nginx.org
 ```
-https://nginx.org/download/nginx-1.19.1.tar.gz
+wget https://nginx.org/download/nginx-1.19.1.tar.gz
 ```
 
 3. Unzip the file.
@@ -107,6 +116,7 @@ tar -zxvf nginx-1.19.1.tar.gz
 
 4. Configure source code to the build.
 ```
+cd nginx-1.19.1
 ./configure
 ```
 
@@ -133,14 +143,76 @@ CentOS : yum install pcre pcre-devel zlib zlib-devel openssl openssl-devel make
 pid-path=/var/run/nginx.pid --with-http_ssl_module
 ```
 
-8. Compile and install Nginx
+9. Compile and install Nginx
 ```
 make
 make install
 ```
 
 
+## Add Nginx as Service 
 
+- Add Nginx in Systemd services.
+
+- Nginx to run at all times, be restarted in case of failure (unexpected exit), and even survive server restarts.
+
+```
+reboot  // reboot 
+```
+Note: if you reboot the machine then connection is lost and connection is fail 
+so we can do this process 
+
+- if you can do this process and if you **reboot** the machine then not connection is lost. **OK**
+
+Let's Go.
+
+1. create the file in this directory.
+```
+touch /lib/systemd/system/nginx.service   
+```
+
+2. and open it
+```
+nano /lib/systemd/system/nginx.service
+```
+
+3. paste this 
+
+```
+[Unit] 
+Description=The NGINX HTTP and reverse proxy server
+After=syslog.target network-online.target remote-fs.target nss-lookup.target
+Wants=network-online.target
+
+[Service] 
+Type=forking 
+PIDFile=var/run/nginx.pid 
+ExecStartPre=/usr/bin/nginx -t 
+ExecStart=/usr/bin/nginx 
+ExecReload=/usr/sbin/nginx -s reload 
+ExecStop=/bin/kill -s QUIT $MAINPID 
+PrivateTmp=true 
+
+[Install] 
+WantedBy=multi-user.target
+```
+4. save and exit the file 
+```
+ctrl + 0 -> save command
+enter 
+ctrl + x   -> exit command 
+```
+
+5. check nginx is running or not 
+```
+ps -ef | grep nginx
+```
+
+6. Start Again nginx 
+```
+nginx -s stop 
+systemctl start nginx  
+```
 
 
 
