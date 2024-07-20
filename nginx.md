@@ -1171,7 +1171,105 @@ http {
 
 ## 0.8 Add Dynamic Modules 
 
-- i will do later 
+- in my nginx have not found the module file 
+
+1. see the configuration 
+```
+nginx -V
+```
+output:
+```
+--sbin-path=/usr/bin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-pcre --pid-path=/var/run/nginx.pid --with-http_ssl_module
+```
+2. check the how many configure command are found in configure folder 
+```
+root@srv563446:~# cd nginx-1.27.0
+./configure --help   // check the configure file which module are foud 
+./configure --help | grep dynamic    // check the spacific module like dynamic module 
+```
+
+Note: Here are Too much module are found, suppose add the dynamic module in nginx configure file 
+
+- i want to add the new module this **--with-http_image_filter_module=dynamic** im my configure file 
+
+3. Add the New module in you nginx configure 
+
+[A].
+```
+nginx -V   --> copy this output 
+```
+[B].
+- Like this format ./configure [Paste A] [Add module which you want] [define the path]
+
+Note -> module path are **--modules-path=/etc/nginx/modules**
+
+```
+./configure --sbin-path=/usr/bin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-pcre --pid-path=/var/run/nginx.pid --with-http_ssl_module --with-http_image_filter_module=dynamic --modules-path=/etc/nginx/modules
+```
+we get the error: 
+```
+ error: the HTTP image filter module requires the GD library.
+You can either do not enable the module or install the libraries.
+```
+[C].
+```
+apt-get install libgd-dev
+```
+[D].
+- configure Again 
+
+```
+./configure --sbin-path=/usr/bin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-pcre --pid-path=/var/run/nginx.pid --with-http_ssl_module --with-http_image_filter_module=dynamic --modules-path=/etc/nginx/modules
+```
+[E].
+```
+make
+```
+[F].
+```
+make install
+```
+4. check the module
+
+```
+nginx -V
+root@srv563446:/etc/nginx/modules# ls
+```
+output:
+```
+ngx_http_image_filter_module.so
+```
+5. define the dynamic image 
+
+```
++ load_module /etc/nginx/modules/ngx_http_image_filter_module.so;
+
+events {
+
+}
+
+http {
+
+    include mime.types;
+
+    server {
+
+        listen 80;
+        server_name 213.210.36.105;
+
+        root /bloggingtemplate/;
+
+        + location = /assets/images/about/profile_image.jpg1 {
+                        image_filter rotate 180;
+                }
+
+        }
+
+
+
+}
+```
+
 
 ## 0.9 Reverce Proxy
 
