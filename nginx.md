@@ -54,6 +54,96 @@ ifconfig
 
 
 
+## Install Nginx from Source Code 
+
+- Q. what is the need of install the nginx in source code
+
+Installing NGINX from source code offers several benefits, especially if you need more control over your web server setup. Here are some key reasons why you might choose to install NGINX from source:
+
+### Benefits of Installing NGINX from Source
+
+1. **Customization**:
+   - **Add or Remove Modules**: You can include specific modules you need and exclude those you don't, optimizing performance and reducing the attack surface¹.
+   - **Custom Configuration**: Tailor the configuration options and compile-time parameters to suit your specific requirements¹.
+
+2. **Latest Features and Updates**:
+   - **Newest Version**: Access the latest stable or mainline versions of NGINX, which might not be available in prebuilt packages².
+   - **Security Patches**: Apply the latest security patches and updates immediately².
+
+3. **Performance Optimization**:
+   - **Optimized Compilation**: Compile NGINX with optimizations specific to your hardware and operating system, potentially improving performance³.
+
+4. **Flexibility**:
+   - **Custom Installation Paths**: Define custom installation paths and directories, which can be useful for specific deployment environments¹.
+   - **Third-Party Modules**: Easily integrate third-party modules that might not be included in prebuilt packages².
+
+### Example Use Cases
+- **High-Traffic Websites**: Customizing NGINX for performance and security can be crucial for high-traffic websites.
+- **Specialized Applications**: Applications requiring specific modules or configurations not available in standard packages.
+- **Development and Testing**: Developers might need the latest features and patches for testing and development purposes.
+
+### Summary
+While installing NGINX from prebuilt packages is quicker and easier, compiling from source provides greater control, customization, and access to the latest features and updates. This approach is particularly beneficial for advanced users and specific use cases where performance, security, and flexibility are paramount¹²³.
+
+> see the pdf
+[text](<nginx-course-files/nginx-course-files/2.1 Text Direction  Building NGINX from Source Code .pdf>)
+
+
+1. Update Packages
+```
+Ubuntu - apt-get update
+CentOS - yum update
+```
+
+2. Download the NGINX source code from nginx.org
+```
+https://nginx.org/download/nginx-1.19.1.tar.gz
+```
+
+3. Unzip the file.
+```
+tar -zxvf nginx-1.19.1.tar.gz
+```
+
+4. Configure source code to the build.
+```
+./configure
+```
+
+5. Install code compiler
+```
+Ubuntu : apt-get install build-essential
+CentOS : yum groupinstall "Development Tools"
+```
+
+6. Configure source code to the build.
+```
+./configure
+```
+
+7. GET Support Libraries
+```
+Ubuntu : apt-get install libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev make
+CentOS : yum install pcre pcre-devel zlib zlib-devel openssl openssl-devel make
+```
+
+8. Execute configuration again
+```
+./configure --sbin-path=/usr/bin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-pcre --
+pid-path=/var/run/nginx.pid --with-http_ssl_module
+```
+
+8. Compile and install Nginx
+```
+make
+make install
+```
+
+
+
+
+
+
 ### 0.0 Add NGINX Process in Systemd Services to make the WebServer Resilient.
 
 1. NGINX Init Services File.
@@ -911,7 +1001,7 @@ http {
 
 ## 0.8 Add Dynamic Modules 
 
-- i will do leter
+- i will do later 
 
 ## 0.9 Reverce Proxy
 
@@ -958,3 +1048,103 @@ origin server.
 
 
 
+```
+nginx -V    // check out where is you module and file 
+```
+
+- install the Module 
+
+If the module is available as a package, install it using your package manager. For example:
+
+```
+sudo apt-get install ngx_http_realip_module 
+nginx -V    // Again check module is add or not 
+```
+
+---------------------------------------
+
+To configure the `nginx.conf` file to use the `--with-http_realip_module`, follow these steps:
+
+### Step-by-Step Configuration
+
+1. **Ensure the Module is Compiled**: First, make sure NGINX is compiled with the `--with-http_realip_module` option. You can check this by running:
+   ```bash
+   nginx -V
+   ```
+   Look for `--with-http_realip_module` in the output.
+
+2. **Edit the `nginx.conf` File**: Open the `nginx.conf` file, usually located in `/etc/nginx/` or `/usr/local/nginx/conf/`.
+   ```bash
+   sudo nano /etc/nginx/nginx.conf
+   ```
+
+3. **Add Configuration Directives**: Add the following directives to the `http` block or the specific `server` block where you want to apply the real IP configuration.
+
+   ```nginx
+   http {
+       # Define trusted IP addresses or CIDR blocks
+       set_real_ip_from 192.168.1.0/24;
+       set_real_ip_from 192.168.2.1;
+       set_real_ip_from 2001:0db8::/32;
+
+       # Specify the header to use for the real IP
+       real_ip_header X-Forwarded-For;
+
+       # Enable recursive search for the real IP
+       real_ip_recursive on;
+
+       # Other configurations...
+   }
+   ```
+
+   - **`set_real_ip_from`**: Defines trusted addresses that are known to send correct replacement addresses.
+   - **`real_ip_header`**: Specifies the header field to use for the real IP.
+   - **`real_ip_recursive`**: Enables recursive search for the real IP.
+
+4. **Save and Exit**: Save the changes and exit the editor.
+
+5. **Test the Configuration**: Test the NGINX configuration to ensure there are no syntax errors.
+   ```bash
+   sudo nginx -t
+   ```
+
+6. **Restart NGINX**: Restart NGINX to apply the changes.
+   ```bash
+   sudo systemctl restart nginx
+   ```
+
+### Example Configuration
+Here’s an example configuration snippet for the `nginx.conf` file:
+```nginx
+http {
+    set_real_ip_from 192.168.1.0/24;
+    set_real_ip_from 192.168.2.1;
+    set_real_ip_from 2001:0db8::/32;
+    real_ip_header X-Forwarded-For;
+    real_ip_recursive on;
+
+    server {
+        listen 80;
+        server_name example.com;
+
+        location / {
+            proxy_pass http://backend;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+    }
+}
+```
+
+This configuration ensures that NGINX uses the real IP address from the `X-Forwarded-For` header, which is useful when NGINX is behind a reverse proxy or load balancer¹².
+
+If you have any more questions or need further assistance, feel free to ask! 😊
+
+¹: [NGINX Documentation on ngx_http_realip_module](https://nginx.org/en/docs/http/ngx_http_realip_module.html)
+²: [X4B Knowledgebase on Real IP in NGINX](https://www.x4b.net/kb/Technology/RealIP-Nginx)
+
+Source: Conversation with Copilot, 20/7/2024
+(1) Module ngx_http_realip_module - nginx. https://nginx.org/en/docs/http/ngx_http_realip_module.html.
+(2) How to obtain the connecting clients Real IP on Nginx :: X4B. https://www.x4b.net/kb/Technology/RealIP-Nginx.
+(3) Module ngx_http_realip_module - Get docs. https://getdocs.org/Nginx/docs/latest/http/ngx_http_realip_module.
+(4) undefined. http://nginx.org/download/nginx-1.7.4.tar.gz.
