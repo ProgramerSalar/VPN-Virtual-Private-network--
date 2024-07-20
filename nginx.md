@@ -230,6 +230,12 @@ test -d '/var/log/nginx' \
 make[1]: Leaving directory '/root/nginx-1.27.0'
 ```
 
+10. start the nginx 
+```
+nginx -v   // check the version 
+nginx     // start the nginx 
+ps -ef | grep nginx   // check the status 
+``` 
 
 ## Add Nginx as Service 
 
