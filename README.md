@@ -31,8 +31,8 @@ you show this interface:
 3. before installing any software, it's good practice to update your VPS packages:
 
 ``` 
-    # sudo apt update 
-    # sudo apt upgrade
+     sudo apt update 
+     sudo apt upgrade
 ```
 
 ## 0.1  This is once time Setup 
@@ -41,7 +41,7 @@ you show this interface:
 
 
 ```
-# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 ```
 if you check the version: nvm --version then you get this: Command 'nvm' not found, but there are 14 similar ones.
 
@@ -54,7 +54,7 @@ you should restart the again your command line and enter the ssh Terminal and pa
 then you write the 
 
 ```
-# nvm --version
+ nvm --version
 ``` 
 
 
@@ -62,7 +62,7 @@ then you write the
 ### 2. Install the node 
 
 ```
-# nvm install --lts
+ nvm install --lts
 
 ```
 lts -> long term support 
@@ -70,13 +70,13 @@ lts -> long term support
 check the verion
 
 ```
-# node -v
+ node -v
 ```
 
 ### 3. install the Git 
 
 ```
-# sudo apt install git
+ sudo apt install git
 ```
 
 
@@ -84,14 +84,14 @@ if you connect github to your project
 then install the cli of github 
 
 ```
-# sudo apt install gh
+ sudo apt install gh
 ```
 
 
 Authenticate the your github in nvm 
 
 ```
-# gh auth login
+ gh auth login
 ```
 
 
